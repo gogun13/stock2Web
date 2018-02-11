@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee" 
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-3.2.xsd   
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd   
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd   
+        http://www.springframework.org/schema/jee 
+        http://www.springframework.org/schema/jee/spring-jee-3.2.xsd   
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+        http://www.springframework.org/schema/cache
+        http://www.springframework.org/schema/cache/spring-cache.xsd
+        ">
+    
+    <bean id="propertyConfigurer"  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="/WEB-INF/config/config.properties"></property>
+    </bean>
+	
+	<!-- telling container to take care of annotations stuff -->
+    <context:annotation-config/>
+    <!-- declaring base package -->
+    <context:component-scan base-package="com.enjoy.core.business" />
+    <context:component-scan base-package="com.enjoy.core.services" />
+    <context:component-scan base-package="com.enjoy.stock.business" />
+    <context:component-scan base-package="com.enjoy.stock.services" />
+    
+    <!-- telling container to take care of annotations stuff -->
+    <context:annotation-config/>
+    <!-- declaring base package -->
+    <bean id='cacheManager' class='org.springframework.cache.support.SimpleCacheManager'>
+        <property name='caches'>
+            <set>
+                <bean class='org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean' p:name='warningType'/>
+            </set>
+        </property>
+    </bean>
+    
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	    <property name="driverClassName" value="#{systemProperties['STOCK_DRIVER']}" />
+	    <property name="url" value="#{systemProperties['STOCK_URL']}/#{systemProperties['STOCK2_DB_NAME']}?characterEncoding=UTF-8" />
+	    <property name="username" value="#{systemProperties['STOCK_USER']}" />
+	    <property name="password" value="#{systemProperties['STOCK_PASS']}" />
+	</bean>
+	
+	<!--
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	    <property name="driverClassName" value="${database.driver}" />
+	    <property name="url" value="${database.url}?characterEncoding=UTF-8" />
+	    <property name="username" value="${database.user}" />
+	    <property name="password" value="${database.password}" />
+	</bean>
+	-->
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:annotation-driven  />
+    
+    <tx:advice id="defaultTransactionAdvice">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="java.lang.Exception"/>
+            <tx:method name="*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="com.enjoy.core.exception.EnjoyException"/>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="list*" read-only="true"/>
+            <tx:method name="is*" read-only="true"/>
+            <tx:method name="check*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+        <aop:pointcut id="coreBusinessMethods" expression="execution(* com.enjoy.core.business..*.*(..))"/>
+        <aop:pointcut id="stockBusinessMethods" expression="execution(* com.enjoy.stock.business..*.*(..))"/>
+        <aop:advisor advice-ref="defaultTransactionAdvice" pointcut-ref="coreBusinessMethods"/>
+        <aop:advisor advice-ref="defaultTransactionAdvice" pointcut-ref="stockBusinessMethods"/>
+    </aop:config>
+    
+    <aop:aspectj-autoproxy  proxy-target-class="true"/>
+
+</beans>
+

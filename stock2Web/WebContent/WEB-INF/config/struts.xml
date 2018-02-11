@@ -1,0 +1,177 @@
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+"http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	
+	<constant name="struts.ui.theme" value="simple" />
+	
+    <!-- Configuration for the default package. -->
+    <package name="default" extends="struts-default">
+    	<interceptors>
+            <interceptor name="cachingHeadersInterceptor" class="com.enjoy.core.interceptors.CachingHeadersInterceptor"/>
+            <interceptor name="templatesDebugInterceptor" class="com.enjoy.core.interceptors.TemplatesDebugInterceptor" />
+            <interceptor name="requestWrapperInterceptor" class="com.enjoy.core.interceptors.RequestWrapperInterceptor" />
+            <interceptor name="session" class="com.enjoy.core.interceptors.SessionInterceptor" />
+            
+            <interceptor-stack name="stock2WebStack">
+                <interceptor-ref name="exception"/>
+                <interceptor-ref name="alias"/>
+                <interceptor-ref name="servletConfig"/>
+                <interceptor-ref name="i18n"/>
+                <interceptor-ref name="prepare"/>
+                <interceptor-ref name="chain"/>
+                <interceptor-ref name="scopedModelDriven"/>
+                <interceptor-ref name="modelDriven"/>
+                <interceptor-ref name="fileUpload"/>
+                <interceptor-ref name="checkbox"/>
+                <interceptor-ref name="multiselect"/>
+                <interceptor-ref name="staticParams"/>
+                <interceptor-ref name="requestWrapperInterceptor"/>                
+                <interceptor-ref name="actionMappingParams"/>
+                <interceptor-ref name="params">
+                    <param name="excludeParams">dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*</param>
+                </interceptor-ref>
+                <interceptor-ref name="conversionError"/>
+                <interceptor-ref name="validation">
+                    <param name="excludeMethods">input,back,cancel,browse</param>
+                </interceptor-ref>
+                <interceptor-ref name="workflow">
+                    <param name="excludeMethods">input,back,cancel,browse</param>
+                </interceptor-ref>
+                <interceptor-ref name="debugging"/>
+                <interceptor-ref name="cachingHeadersInterceptor"/>
+                <interceptor-ref name="templatesDebugInterceptor"/>
+            </interceptor-stack>
+            <interceptor-stack name="sessionExpirayStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="session"/>
+            </interceptor-stack>
+        </interceptors>
+        
+        <default-interceptor-ref name="stock2WebStack"/>
+    	
+    	<global-results>
+	        <result name="error">/jsp/error/error.jsp</result>
+	        <result name="errorBusiness">/jsp/error/errorBusiness.jsp</result>
+	    </global-results>
+	    <global-exception-mappings>
+	        <exception-mapping exception="java.sql.SQLException" result="error"/>
+	        <exception-mapping exception="com.enjoy.core.exception.EnjoyException" result="errorBusiness"/>
+	        <exception-mapping exception="java.lang.Exception" result="error"/>
+	    </global-exception-mappings>
+
+        <action name="index" class="com.enjoy.core.actions.HomeAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/home.jsp</result>
+            <result name="gotoChangePass" type="redirect" >
+                <param name="location">/changePassAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">success</param> 
+            </result>
+            <result name="gotoCompanyDetails" type="redirect" >
+                <param name="location">/companyDetailsMaintananceAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">success</param> 
+            </result>
+            <result name="welcome">/jsp/welcome.jsp</result>
+        </action>
+        
+        <action name="logout" class="com.enjoy.core.actions.LogoutAction">
+            <result type="redirect">/jsp/index.jsp</result>
+            <result name="clearInterval">/jsp/error/loginFail.jsp</result>
+        </action>
+        
+        <action name="changePassAction" class="com.enjoy.core.actions.ChangePassAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/user/changePassForm.jsp</result>
+        </action>
+        
+        <action name="userDetailsMaintanancesAction" class="com.enjoy.core.actions.UserDetailsMaintanancesAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/user/userDetailsMaintananceForm.jsp</result>
+            <result name="onBack" type="redirect" >
+                <param name="location">/userDetailsSearchAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">onBack</param>
+            </result>  
+        </action>
+        
+        <action name="userDetailsSearchAction" class="com.enjoy.core.actions.UserDetailsSearchAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/user/userDetailsSearchForm.jsp</result>
+            <result name="search">/jsp/user/userDetailsSearch-list.jsp</result>
+            <result name="gotoUserDetail" type="redirect" >
+                <param name="location">/userDetailsMaintanancesAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">onGetUserDetail</param>
+                <param name="userUniqueId">${userUniqueId}</param>
+                <param name="showBackFlag">Y</param>  
+            </result>  
+        </action>
+        
+        <action name="companyDetailsSearchAction" class="com.enjoy.core.actions.CompanyDetailsSearchAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/company/companyDetailsSearchForm.jsp</result>
+            <result name="search">/jsp/company/companyDetailsSearch-list.jsp</result>
+            <result name="gotoDetail" type="redirect" >
+                <param name="location">/companyDetailsMaintananceAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">getDetail</param>
+                <param name="hidTin">${hidTin}</param>
+                <param name="showBackFlag">Y</param>
+            </result>  
+        </action>
+        
+        <action name="companyDetailsMaintananceAction" class="com.enjoy.core.actions.CompanyDetailsMaintananceAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/company/companyDetailsMaintananceForm.jsp</result>
+            <result name="onBack" type="redirect" >
+                <param name="location">/companyDetailsSearchAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">onBack</param>
+            </result>
+        </action>
+        
+        <action name="relationUserAndCompanyAction" class="com.enjoy.core.actions.RelationUserAndCompanyAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/relUserNcomp/relUserNcompForm.jsp</result>
+            <result name="search">/jsp/relUserNcomp/relUserNcomp-list.jsp</result>
+            <result name="lookUp" type="redirect" >
+                <param name="location">/userLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">success</param>
+            </result>
+        </action>
+        
+        <action name="userLookUpAction" class="com.enjoy.core.actions.UserLookUpAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/user/userLookUpForm.jsp</result>
+            <result name="search">/jsp/user/userLookUp-list.jsp</result>
+        </action>
+        
+        <action name="refconstantcodeAction" class="com.enjoy.core.actions.RefconstantcodeAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/refconstantcode/refConstantCodeForm.jsp</result>
+        </action>
+		
+    </package>
+    
+    <include file="../config/struts-stock.xml"></include>
+    
+</struts>

@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.1//EN"
+"http://struts.apache.org/dtds/struts-2.1.dtd">
+
+<struts>
+
+    <package name="stock2Web" extends="default">
+		<action name="productTypeAction" class="com.enjoy.stock.actions.ProductTypeAction">
+            <interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="fileUpload">
+                <param name="allowedTypes"> 
+			        application/vnd.ms-excel,application/x-msexcel,application/ms-      excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+			    </param>
+                <param name="maximumSize">10240</param>
+            </interceptor-ref>
+            <result>/jsp/productType/productTypeForm.jsp</result>
+            <result name="search">/jsp/productType/productType-list.jsp</result>
+        </action>
+        
+        <action name="unitTypeAction" class="com.enjoy.stock.actions.UnitTypeAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/unitType/unitTypeForm.jsp</result>
+            <result name="search">/jsp/unitType/unitType-list.jsp</result>
+        </action>
+        
+        <action name="productGroupAction" class="com.enjoy.stock.actions.ProductGroupAction">
+            <interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="fileUpload">
+                <param name="allowedTypes"> 
+			        application/vnd.ms-excel,application/x-msexcel,application/ms-      excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+			    </param>
+                <param name="maximumSize">10240</param>
+            </interceptor-ref>
+            <result>/jsp/productGroup/productGroupForm.jsp</result>
+            <result name="search">/jsp/productGroup/productGroup-list.jsp</result>
+        </action>
+        
+        <action name="productAction" class="com.enjoy.stock.actions.ProductAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/product/productForm.jsp</result>
+            <result name="search">/jsp/product/product-list.jsp</result>
+            <result name="onBack" type="redirect" >
+                <param name="location">/productSearchAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">onBack</param>
+            </result>
+        </action>
+        
+        <action name="productSearchAction" class="com.enjoy.stock.actions.ProductSearchAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/product/productSearchForm.jsp</result>
+            <result name="search">/jsp/product/productSearch-list.jsp</result>
+            <result name="gotoDetail" type="redirect" >
+                <param name="location">/productAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">getDetail</param>
+                <param name="hidProductCode">${hidProductCode}</param>
+                <param name="showBackFlag">Y</param>
+            </result>
+            <result name="gotoProductBarCode">/jsp/product/productBarCodeForm.jsp</result>
+            <result name="productBarCodeList">/jsp/product/productBarCode-list.jsp</result>
+        </action>
+        
+        <action name="multiManageProductAction" class="com.enjoy.stock.actions.MultiManageProductAction">
+            <interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <interceptor-ref name="fileUpload">
+                <param name="allowedTypes"> 
+			        application/vnd.ms-excel,application/x-msexcel,application/ms-      excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+			    </param>
+                <param name="maximumSize">10240</param>
+            </interceptor-ref>
+            <result>/jsp/product/multiManageProductForm.jsp</result>
+            <result name="search">/jsp/product/multiManageProduct-list.jsp</result>
+        </action>
+        
+        <action name="relationGroupCustomerAction" class="com.enjoy.stock.actions.RelationGroupCustomerAction">
+            <interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/customer/relationGroupCustomerForm.jsp</result>
+            <result name="search">/jsp/customer/relationGroupCustomer-list.jsp</result>
+        </action>
+        
+        <action name="customerAction" class="com.enjoy.stock.actions.CustomerAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/customer/customerForm.jsp</result>
+            <result name="onBack" type="redirect" >
+                <param name="location">/customerSearchAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">onBack</param>
+            </result>
+        </action>
+        
+        <action name="customerSearchAction" class="com.enjoy.stock.actions.CustomerSearchAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/customer/customerSearchForm.jsp</result>
+            <result name="search">/jsp/customer/customerSearch-list.jsp</result>
+            <result name="gotoDetail" type="redirect" >
+                <param name="location">/customerAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">getDetail</param>
+                <param name="hidCusCode">${hidCusCode}</param>
+                <param name="showBackFlag">Y</param>
+            </result>  
+        </action>
+        
+        <action name="companyVendorAction" class="com.enjoy.stock.actions.CompanyVendorAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/companyVendor/companyVendorForm.jsp</result>
+            <result name="onBack" type="redirect" >
+                <param name="location">/companyVendorSearchAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">onBack</param>
+            </result>
+        </action>
+        
+        <action name="companyVendorSearchAction" class="com.enjoy.stock.actions.CompanyVendorSearchAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/companyVendor/companyVendorSearchForm.jsp</result>
+            <result name="search">/jsp/companyVendor/companyVendorSearch-list.jsp</result>
+            <result name="gotoDetail" type="redirect" >
+                <param name="location">/companyVendorAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">getDetail</param>
+                <param name="hidVendorCode">${hidVendorCode}</param>
+                <param name="showBackFlag">Y</param>
+            </result>  
+        </action>
+        
+        <action name="reciveStockAction" class="com.enjoy.stock.actions.ReciveStockAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/reciveStock/reciveStockForm.jsp</result>
+            <result name="search">/jsp/reciveStock/reciveStock-list.jsp</result>
+            <result name="onBack" type="redirect" >
+                <param name="location">/reciveStockSearchAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">onBack</param>
+            </result>
+            <result name="openProductLoogUp" type="redirect" >
+                <param name="location">/productLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+            <result name="vendorDetailPopUp" type="redirect" >
+                <param name="location">/companyVendorPopUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="hidVendorCodePopUp">${companyVendorBean.vendorCode}</param>
+            </result>
+            <result name="comparePricePopUp" type="redirect" >
+                <param name="location">/comparePriceAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="productCode">${productCode}</param>
+                <param name="command">comparePricePopUp</param>
+                <param name="comparePriceFlagPopUp">Y</param>
+            </result>
+        </action>
+        
+        <action name="productLookUpAction" class="com.enjoy.stock.actions.ProductLookUpAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/product/productLookUpForm.jsp</result>
+            <result name="search">/jsp/product/productLookUp-list.jsp</result>
+        </action>
+        
+        <action name="companyVendorPopUpAction" class="com.enjoy.stock.actions.CompanyVendorPopUpAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/companyVendor/companyVendorPopUpForm.jsp</result>
+        </action>
+        
+        <action name="comparePriceAction" class="com.enjoy.stock.actions.ComparePriceAction">
+            <interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/comparePrice/comparePriceForm.jsp</result>
+            <result name="search">/jsp/comparePrice/comparePrice-list.jsp</result>
+        </action>
+        
+        <action name="reciveStockSearchAction" class="com.enjoy.stock.actions.ReciveStockSearchAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/reciveStock/reciveStockSearchForm.jsp</result>
+            <result name="search">/jsp/reciveStock/reciveStockSearch-list.jsp</result>
+            <result name="gotoDetail" type="redirect" >
+                <param name="location">/reciveStockAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">getDetail</param>
+                <param name="hidReciveNo">${hidReciveNo}</param>
+                <param name="showBackFlag">Y</param>
+            </result>  
+        </action>
+        
+        <action name="adjustStockAction" class="com.enjoy.stock.actions.AdjustStockAction">
+            <interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/adjustStock/adjustStockForm.jsp</result>
+            <result name="search">/jsp/adjustStock/adjustStock-list.jsp</result>
+            <result name="openProductLoogUp" type="redirect" >
+                <param name="location">/productLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+        </action>
+        
+        <action name="adjustStockHistoryAction" class="com.enjoy.stock.actions.AdjustStockHistoryAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/adjustStock/adjustStockHistoryForm.jsp</result>
+            <result name="search">/jsp/adjustStock/adjustStockHistory-list.jsp</result>
+        </action>
+        
+        <action name="invoiceCashAction" class="com.enjoy.stock.actions.InvoiceCashAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/invoiceCash/invoiceCashForm.jsp</result>
+            <result name="search">/jsp/invoiceCash/invoiceCash-list.jsp</result>
+            <result name="onBack" type="redirect" >
+                <param name="location">/invoiceCashSearchAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">onBack</param>
+            </result>
+            <result name="onBackUpdateCredit" type="redirect" >
+                <param name="location">/updateInvoiceCreditSearchAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">onBack</param>
+            </result>
+            <result name="openProductLoogUp" type="redirect" >
+                <param name="location">/productLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+            <result name="openUserLoogUp" type="redirect" >
+                <param name="location">/userLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+            <result name="openCustomerLookUp" type="redirect" >
+                <param name="location">/customerLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+        </action>
+        
+        <action name="customerLookUpAction" class="com.enjoy.stock.actions.CustomerLookUpAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/customer/customerLookUpForm.jsp</result>
+            <result name="search">/jsp/customer/customerLookUp-list.jsp</result>
+        </action>
+        
+        <action name="invoiceCashSearchAction" class="com.enjoy.stock.actions.InvoiceCashSearchAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/invoiceCash/invoiceCashSearchForm.jsp</result>
+            <result name="search">/jsp/invoiceCash/invoiceCashSearch-list.jsp</result>
+            <result name="gotoDetail" type="redirect" >
+                <param name="location">/invoiceCashAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">getDetail</param>
+                <param name="hidInvoiceCode">${hidInvoiceCode}</param>
+                <param name="showBackFlag">Y</param>
+                <param name="updateCredit">N</param>
+            </result>  
+        </action>
+        
+        <action name="invoiceCreditAction" class="com.enjoy.stock.actions.InvoiceCreditAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/invoiceCredit/invoiceCreditForm.jsp</result>
+            <result name="search">/jsp/invoiceCredit/invoiceCredit-list.jsp</result>
+            <result name="onBack" type="redirect" >
+                <param name="location">/invoiceCreditSearchAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">onBack</param>
+            </result>
+            <result name="openProductLoogUp" type="redirect" >
+                <param name="location">/productLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+            <result name="openUserLoogUp" type="redirect" >
+                <param name="location">/userLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+            <result name="openCustomerLookUp" type="redirect" >
+                <param name="location">/customerLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+        </action>
+        
+        <action name="invoiceCreditSearchAction" class="com.enjoy.stock.actions.InvoiceCreditSearchAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/invoiceCredit/invoiceCreditSearchForm.jsp</result>
+            <result name="search">/jsp/invoiceCredit/invoiceCreditSearch-list.jsp</result>
+            <result name="gotoDetail" type="redirect" >
+                <param name="location">/invoiceCreditAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">getDetail</param>
+                <param name="hidInvoiceCode">${hidInvoiceCode}</param>
+                <param name="showBackFlag">Y</param>
+            </result>  
+        </action>
+        
+        <action name="updateInvoiceCreditSearchAction" class="com.enjoy.stock.actions.UpdateInvoiceCreditSearchAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/updateInvoiceCredit/updateInvoiceCreditSearchForm.jsp</result>
+            <result name="search">/jsp/updateInvoiceCredit/updateInvoiceCreditSearch-list.jsp</result>
+            <result name="gotoDetail" type="redirect" >
+                <param name="location">/invoiceCashAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+                <param name="command">getDetail</param>
+                <param name="hidInvoiceCode">${hidInvoiceCode}</param>
+                <param name="updateCredit">Y</param>
+                <param name="showBackFlag">Y</param>
+            </result>  
+        </action>
+        
+        <action name="alertLowProductReportAction" class="com.enjoy.stock.actions.AlertLowProductReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/alertLowProductReportForm.jsp</result>
+        </action>
+        
+        <action name="billingReportAction" class="com.enjoy.stock.actions.BillingReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/billingReportForm.jsp</result>
+            <result name="openCustomerLookUp" type="redirect" >
+                <param name="location">/customerLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+        </action>
+        
+        <action name="stockBalanceReportAction" class="com.enjoy.stock.actions.StockBalanceReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/stockBalanceReportForm.jsp</result>
+        </action>
+        
+        <action name="stockMovingReportAction" class="com.enjoy.stock.actions.StockMovingReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/stockMovingReportForm.jsp</result>
+        </action>
+        
+        <action name="historyPurchasedByDealerReportAction" class="com.enjoy.stock.actions.HistoryPurchasedByDealerReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/historyPurchasedByDealerReportForm.jsp</result>
+        </action>
+        
+        <action name="historyPurchasedByProductReportAction" class="com.enjoy.stock.actions.HistoryPurchasedByProductReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/historyPurchasedByProductReportForm.jsp</result>
+        </action>
+        
+        <action name="summarySaleByDayReportAction" class="com.enjoy.stock.actions.SummarySaleByDayReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/summarySaleByDayReportForm.jsp</result>
+        </action>
+        
+        <action name="summarySaleByMonthReportAction" class="com.enjoy.stock.actions.SummarySaleByMonthReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/summarySaleByMonthReportForm.jsp</result>
+        </action>
+        
+        <action name="summarySaleByProductReportAction" class="com.enjoy.stock.actions.SummarySaleByProductReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/summarySaleByProductReportForm.jsp</result>
+        </action>
+        
+        <action name="summarySaleByCustomerReportAction" class="com.enjoy.stock.actions.SummarySaleByCustomerReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/summarySaleByCustomerReportForm.jsp</result>
+            <result name="openCustomerLookUp" type="redirect" >
+                <param name="location">/customerLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+        </action>
+        
+        <action name="summarySaleByEmployeeReportAction" class="com.enjoy.stock.actions.SummarySaleByEmployeeReportAction">
+        	<interceptor-ref name="sessionExpirayStack" />
+            <interceptor-ref name="defaultStack"/>
+            <result>/jsp/report/summarySaleByEmployeeReportForm.jsp</result>
+            <result name="openUserLoogUp" type="redirect" >
+                <param name="location">/userLookUpAction.action</param>
+                <param name="parse">true</param>
+                <param name="encode">true</param>
+            </result>
+        </action>
+        
+    </package>
+</struts>

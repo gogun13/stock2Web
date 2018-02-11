@@ -1,0 +1,97 @@
+package com.enjoy.stock.pdf.header;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+
+import org.json.simple.JSONObject;
+
+import com.enjoy.core.pdf.utils.EnjoyItext;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.ExceptionConverter;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfPageEventHelper;
+import com.lowagie.text.pdf.PdfWriter;
+
+public class SummarySaleByCustomerHeader extends PdfPageEventHelper {
+	
+	private JSONObject 	formDataObj;
+	private EnjoyItext	enjoyItext;
+	
+	public SummarySaleByCustomerHeader(JSONObject formDataObj) {
+		enjoyItext 	= new EnjoyItext();
+		setFormDataObj(formDataObj);
+	}
+	
+	public void onStartPage(PdfWriter writer, Document document) {
+		try{
+			document.add(enjoyItext.genHeader(formDataObj, "รายงานประวัติการซื้อของลูกค้า"));
+			document.add(brLine());
+			document.add(genHeader1());
+			document.add(brLine());
+			
+		} catch (Exception e) {
+	         throw new ExceptionConverter(e);
+	    }
+	}
+	
+//	private PdfPTable genHeader() throws DocumentException, MalformedURLException, IOException {
+//		
+//		PdfPTable 	table 			= new PdfPTable(1);
+//		JSONObject 	jsonObjectMain  = this.formDataObj;
+//		JSONObject  customerDetails	= (JSONObject) jsonObjectMain.get("customerDetails");
+//		String		address			= "";
+//		
+//		address = " โทร." + enjoyItext.getText(customerDetails, "tel") 
+//				+ " Fax." + enjoyItext.getText(customerDetails, "fax") 
+//				+ " Email." + enjoyItext.getText(customerDetails, "email");
+//		
+//		table.addCell(enjoyItext.setCellWB(enjoyItext.getText(customerDetails, "fullName"), enjoyItext.getFont11Bold(), 1, Element.ALIGN_CENTER, 0));
+//		table.addCell(enjoyItext.setCellWB(enjoyItext.getText(customerDetails, "address"), enjoyItext.getFont8(), 1, Element.ALIGN_CENTER, 0));
+//		table.addCell(enjoyItext.setCellWB(address, enjoyItext.getFont8(), 1, Element.ALIGN_CENTER, 0));
+//		table.addCell(enjoyItext.setCellWB("", enjoyItext.getFont8(), 1, Element.ALIGN_CENTER, 0));
+//		table.addCell(enjoyItext.setCellWB("รายงานประวัติการซื้อของลูกค้า", enjoyItext.getFont10Bold(), 1, Element.ALIGN_CENTER, 0));
+//		
+//		table.setWidthPercentage(100);
+//	
+//		return table;
+//	}
+	
+	private PdfPTable genHeader1() throws DocumentException, MalformedURLException, IOException {
+		
+		PdfPTable 	table 							= new PdfPTable(1);
+		JSONObject 	jsonObjectMain  				= this.formDataObj;
+		String		rangeReciveDate					= "";
+		
+		rangeReciveDate = enjoyItext.getText(jsonObjectMain, "invoiceDateFrom") + " - " + enjoyItext.getText(jsonObjectMain, "invoiceDateTo");
+		
+		table.addCell(enjoyItext.setCellWB(rangeReciveDate, enjoyItext.getFont9Bold(), 1, Element.ALIGN_RIGHT, 0));
+		
+		table.setWidthPercentage(100);
+	
+		return table;
+	}
+	
+	public PdfPTable brLine() throws DocumentException, MalformedURLException, IOException {
+		
+		PdfPTable 	table 			= new PdfPTable(1);
+		
+		table.addCell(enjoyItext.setCellWB("", enjoyItext.getFont12Bold(), 1, Element.ALIGN_LEFT, 0));
+		
+		table.setWidthPercentage(100);
+	
+		return table;
+	}
+
+	public JSONObject getFormDataObj() {
+		return formDataObj;
+	}
+
+	public void setFormDataObj(JSONObject formDataObj) {
+		this.formDataObj = formDataObj;
+	}
+	
+	
+
+}
