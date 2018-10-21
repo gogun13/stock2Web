@@ -5,7 +5,7 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		gp_initialPage("#changePass");
-		
+		alert(1);
 		$('#btnSave').click(function(){
 		    try{
 		    	if(!lp_validate())return;
